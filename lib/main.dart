@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kisii/screens/login.dart';
+import 'package:kisii/screens/profile.dart';
 import 'package:kisii/screens/scanner.dart';
 
 void main() => runApp(
@@ -15,9 +16,14 @@ class MyHome extends StatelessWidget {
         backgroundColor: Color.fromRGBO(146, 206, 230, 1),
         elevation: 0.0,
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {},
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(100.0),
+          child: Image.asset(
+            'assets/images/peter.jpeg',
+            fit: BoxFit.cover,
+            height: 40.0,
+            width: 40.0,
+          ),
         ),
         title: Image.asset(
           'assets/images/kisii.png',
@@ -56,15 +62,26 @@ class MyHome extends StatelessWidget {
               'Kisii university',
               style: TextStyle(
                   fontFamily: 'Serif',
-                  fontSize: 42.0,
-                  color: Colors.blue,
+                  fontSize: 28.0,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 15.0),
             Container(
-              margin: const EdgeInsets.all(30.0),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
+                ),
+                gradient: LinearGradient(colors: [
+                  Color.fromARGB(255, 49, 140, 243).withOpacity(0.2),
+                  Color.fromARGB(255, 11, 9, 128).withOpacity(0.4)
+                ]),
+              ),
+              // margin: const EdgeInsets.all(30.0),
               child: Container(
-                padding: const EdgeInsets.all(30.0),
+                margin: const EdgeInsets.all(30.0),
 
                 //             decoration: BoxDecoration(
                 // borderRadius: BorderRadius.circular(10),
@@ -76,10 +93,6 @@ class MyHome extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
 
-                  gradient: LinearGradient(colors: [
-                    Colors.blue.withOpacity(0.2),
-                    Colors.white.withOpacity(0.4)
-                  ]),
                   // color: Color.fromARGB(255, 162, 199, 255)
                 ),
                 child: Column(
@@ -130,7 +143,7 @@ class MyHome extends StatelessWidget {
                                     'Scan the QR Code to access the facilities',
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.green,
+                                      color: Colors.blue,
                                     ), //Textstyle
                                   ), //Text
                                   const SizedBox(
@@ -209,10 +222,10 @@ class MyHome extends StatelessWidget {
                                     height: 10,
                                   ), //SizedBox
                                   const Text(
-                                    'Scan the QR Code to access the facilities',
+                                    'View your account details here',
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.green,
+                                      color: Colors.blue,
                                     ), //Textstyle
                                   ), //Text
                                   const SizedBox(
@@ -224,8 +237,7 @@ class MyHome extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              const QRViewExample(),
+                                          builder: (context) => const Profile(),
                                         ));
                                       },
                                       style: ButtonStyle(
@@ -237,7 +249,7 @@ class MyHome extends StatelessWidget {
                                         child: Row(
                                           children: const [
                                             Icon(Icons.touch_app),
-                                            Text('Scan')
+                                            Text('View')
                                           ],
                                         ),
                                       ),
