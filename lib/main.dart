@@ -248,7 +248,7 @@ class MyHome extends StatelessWidget {
                                         padding: const EdgeInsets.all(4),
                                         child: Row(
                                           children: const [
-                                            Icon(Icons.touch_app),
+                                            Icon(Icons.info),
                                             Text('View')
                                           ],
                                         ),
@@ -332,8 +332,8 @@ class MyHome extends StatelessWidget {
                                         padding: const EdgeInsets.all(4),
                                         child: Row(
                                           children: const [
-                                            Icon(Icons.touch_app),
-                                            Text('Scan')
+                                            Icon(Icons.wallet),
+                                            Text('Chec')
                                           ],
                                         ),
                                       ),
@@ -414,8 +414,8 @@ class MyHome extends StatelessWidget {
                                         padding: const EdgeInsets.all(4),
                                         child: Row(
                                           children: const [
-                                            Icon(Icons.touch_app),
-                                            Text('Scan')
+                                            Icon(Icons.payment),
+                                            Text('Pay')
                                           ],
                                         ),
                                       ),
