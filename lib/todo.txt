@@ -1,59 +1,16 @@
+
 import 'package:flutter/material.dart';
-import 'package:kisii/screens/login.dart';
-import 'package:kisii/screens/profile.dart';
-import 'package:kisii/screens/scanner.dart';
 
-import 'screens/pay.dart';
-
-void main() => runApp(
-    const MaterialApp(debugShowCheckedModeBanner: false, home: MyHome()));
-
-class MyHome extends StatelessWidget {
-  const MyHome({Key? key}) : super(key: key);
+class LDrawer extends StatelessWidget {
+  const LDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(146, 206, 230, 1),
-        elevation: 0.0,
-        centerTitle: true,
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(100.0),
-          child: Image.asset(
-            'assets/images/peter.jpeg',
-            fit: BoxFit.cover,
-            height: 40.0,
-            width: 40.0,
-          ),
-        ),
-        title: Image.asset(
-          'assets/images/kisii.png',
-          height: 60,
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.black),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('You have new notification yet')));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.person, color: Colors.black),
-            tooltip: 'Profile',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FirebaseLoginPage()),
-              );
-            },
-          ),
-        ],
-        flexibleSpace: const FlexibleSpaceBar(),
-      ),
-      body: Container(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Navigation Drawer')),
+        body: Container(
         decoration: const BoxDecoration(
           color: Color.fromRGBO(146, 206, 230, 1),
         ),
@@ -72,26 +29,19 @@ class MyHome extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(50),
                   topRight: Radius.circular(50),
                 ),
                 gradient: LinearGradient(colors: [
-                  const Color.fromARGB(255, 49, 140, 243).withOpacity(0.2),
-                  const Color.fromARGB(255, 11, 9, 128).withOpacity(0.4)
+                  Color.fromARGB(255, 49, 140, 243).withOpacity(0.2),
+                  Color.fromARGB(255, 11, 9, 128).withOpacity(0.4)
                 ]),
               ),
               // margin: const EdgeInsets.all(30.0),
               child: Container(
                 margin: const EdgeInsets.all(30.0),
 
-                //             decoration: BoxDecoration(
-                // borderRadius: BorderRadius.circular(10),
-                //   color: Colors.white,
-                //   boxShadow: [
-                //     BoxShadow(color: Colors.green, spreadRadius: 3),
-                //   ],
-                // ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
 
@@ -123,7 +73,7 @@ class MyHome extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                FirebaseLoginPage()),
+                                                const Login()),
                                       );
                                     },
                                   ),
@@ -205,7 +155,7 @@ class MyHome extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                FirebaseLoginPage()),
+                                                const Login()),
                                       );
                                     },
                                   ),
@@ -288,7 +238,7 @@ class MyHome extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                FirebaseLoginPage()),
+                                                const Login()),
                                       );
                                     },
                                   ),
@@ -369,7 +319,8 @@ class MyHome extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const Pay()),
+                                            builder: (context) =>
+                                                const Login()),
                                       );
                                     },
                                   ),
@@ -403,7 +354,8 @@ class MyHome extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
-                                          builder: (context) => const Pay(),
+                                          builder: (context) =>
+                                              const QRViewExample(),
                                         ));
                                       },
                                       style: ButtonStyle(
@@ -434,7 +386,86 @@ class MyHome extends StatelessWidget {
             ),
           ],
         ),
+      ),,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              const DrawerHeader(
+                child: Text('Header'),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+              ListTile(
+                title: const Text('Item 1'),
+                leading: const Icon(
+                  Icons.alarm,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.message,
+                ),
+                title: const Text('Item 2'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Item 2'),
+                leading: const Icon(
+                  Icons.email,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Item 3'),
+                leading: const Icon(
+                  Icons.phone,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Item 4'),
+                leading: const Icon(
+                  Icons.camera,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Item 5'),
+                leading: const Icon(
+                  Icons.watch,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Item 6'),
+                leading: const Icon(
+                  Icons.exit_to_app,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
+
+
