@@ -1,7 +1,125 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
+
+class Profile extends StatefulWidget {
+  @override
+  _ProfileState createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  late Future<Map<String, dynamic>> _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _userData = fetchUserData();
+  }
+
+  Future<Map<String, dynamic>> fetchUserData() async {
+    final response = await http
+        .get(Uri.parse('https://jsonplaceholder.typicode.com/users/1'));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load user data');
+    }
+  }
+
+  Widget _buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade400,
+      highlightColor: Colors.grey.shade100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Persional info:',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[300])),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 16),
+          Text('Address:',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[300])),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 16),
+          Text('Company:',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[300])),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 16,
+            width: double.infinity,
+            color: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +139,7 @@ class Profile extends StatelessWidget {
           ],
         ),
         body: Container(
-          color: Color.fromARGB(255, 84, 236, 203),
+          color: const Color.fromARGB(255, 84, 236, 203),
           child: Column(
             children: [
               Container(
@@ -129,117 +247,53 @@ class Profile extends StatelessWidget {
                     Container(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "Compus",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "Faculty",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                'Department',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "Course",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "Year of Study",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "Main Compus",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "Information Science",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "Computing Sciences",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "Software Engineering",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              child: Text(
-                                "4.2",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      child: FutureBuilder<Map<String, dynamic>>(
+                        future: _userData,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final userData = snapshot.data;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Persional info:',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Name: ${userData!['name']}'),
+                                Text('Username: ${userData['username']}'),
+                                Text('Email: ${userData['email']}'),
+                                Text('Phone: ${userData['phone']}'),
+                                Text('Website: ${userData['website']}'),
+                                const SizedBox(height: 16),
+                                const Text('Address:',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text(
+                                    'Street: ${userData['address']['street']}'),
+                                Text('Suite: ${userData['address']['suite']}'),
+                                Text('City: ${userData['address']['city']}'),
+                                Text(
+                                    'Zipcode: ${userData['address']['zipcode']}'),
+                                const SizedBox(height: 16),
+                                const Text('Company:',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Name: ${userData['company']['name']}'),
+                                Text(
+                                    'Catchphrase: ${userData['company']['catchPhrase']}'),
+                                Text('BS: ${userData['company']['bs']}'),
+                              ],
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          } else {
+                            return _buildShimmerEffect();
+                            // return const Center(
+                            //     child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),

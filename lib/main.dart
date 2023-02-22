@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kisii/screens/fee_status.dart';
 import 'package:kisii/screens/login.dart';
 import 'package:kisii/screens/profile.dart';
 import 'package:kisii/screens/scanner.dart';
@@ -239,7 +240,7 @@ class MyHome extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
-                                          builder: (context) => const Profile(),
+                                          builder: (context) => Profile(),
                                         ));
                                       },
                                       style: ButtonStyle(
@@ -322,8 +323,7 @@ class MyHome extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              const QRViewExample(),
+                                          builder: (context) => FeeStatusPage(),
                                         ));
                                       },
                                       style: ButtonStyle(
