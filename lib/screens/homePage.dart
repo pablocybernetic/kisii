@@ -1,27 +1,38 @@
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:kisii/screens/fee_status.dart';
+import 'package:kisii/screens/login.dart';
+import 'package:kisii/screens/pay.dart';
+import 'package:kisii/screens/profile.dart';
+import 'package:kisii/screens/scanner.dart';
+import 'package:http/http.dart' as http;
+import 'pay.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class MyHome extends StatelessWidget {
+  const MyHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Image.asset('assets/images/kisii.png'),
-        title: const Text(
-          'Kisii university',
-          style: TextStyle(
-            fontSize: 20,
+        backgroundColor: const Color.fromRGBO(146, 206, 230, 1),
+        elevation: 0.0,
+        centerTitle: true,
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(100.0),
+          child: Image.asset(
+            'assets/images/peter.jpeg',
+            fit: BoxFit.cover,
+            height: 40.0,
+            width: 40.0,
           ),
+        ),
+        title: Image.asset(
+          'assets/images/kisii.png',
+          height: 60,
         ),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.add_alert),
+            icon: const Icon(Icons.notifications, color: Colors.black),
             tooltip: 'Show Snackbar',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -29,214 +40,396 @@ class Home extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.person),
+            icon: const Icon(Icons.person, color: Colors.black),
             tooltip: 'Profile',
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Next page'),
-                    ),
-                    body: const Center(
-                      child: Text(
-                        'You have new notification yet',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  );
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
             },
           ),
         ],
         flexibleSpace: const FlexibleSpaceBar(),
       ),
-      body: Column(children: [
-        Row(children: [Text("Kisii University")]),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const QRViewExample(),
-              ));
-            },
-            child: const Text(
-              'Scan',
-              style: TextStyle(
-                fontSize: 20,
-                color: Color.fromARGB(255, 218, 220, 255),
-              ),
-            ),
-          ),
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(146, 206, 230, 1),
         ),
-      ]),
-    );
-  }
-}
+        child: Column(
+          children: [
+            const SizedBox(height: 15.0),
+            const Text(
+              'Kisii university',
+              style: TextStyle(
+                  fontFamily: 'Serif',
+                  fontSize: 28.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 15.0),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
+                ),
+                gradient: LinearGradient(colors: [
+                  const Color.fromARGB(255, 49, 140, 243).withOpacity(0.2),
+                  const Color.fromARGB(255, 11, 9, 128).withOpacity(0.4)
+                ]),
+              ),
+              // margin: const EdgeInsets.all(30.0),
+              child: Container(
+                margin: const EdgeInsets.all(30.0),
 
-class QRViewExample extends StatefulWidget {
-  const QRViewExample({Key? key}) : super(key: key);
+                //             decoration: BoxDecoration(
+                // borderRadius: BorderRadius.circular(10),
+                //   color: Colors.white,
+                //   boxShadow: [
+                //     BoxShadow(color: Colors.green, spreadRadius: 3),
+                //   ],
+                // ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
 
-  @override
-  State<StatefulWidget> createState() => _QRViewExampleState();
-}
-
-class _QRViewExampleState extends State<QRViewExample> {
-  Barcode? result;
-  QRViewController? controller;
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    }
-    controller!.resumeCamera();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(flex: 4, child: _buildQrView(context)),
-          Expanded(
-            flex: 1,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  if (result != null)
-                    Text(
-                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  else
-                    const Text('Scan a code'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.toggleFlash();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                return Text('Flash: ${snapshot.data}');
-                              },
-                            )),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.flipCamera();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getCameraInfo(),
-                              builder: (context, snapshot) {
-                                if (snapshot.data != null) {
-                                  return Text(
-                                      'Camera facing ${describeEnum(snapshot.data!)}');
-                                } else {
-                                  return const Text('loading');
-                                }
-                              },
-                            )),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.pauseCamera();
-                          },
-                          child: const Text('pause',
-                              style: TextStyle(fontSize: 20)),
+                  // color: Color.fromARGB(255, 162, 199, 255)
+                ),
+                child: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 50,
+                          shadowColor: Colors.black,
+                          color: Colors.greenAccent[100],
+                          child: SizedBox(
+                            width: 200,
+                            height: 250,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.qr_code,
+                                      size: 50,
+                                    ),
+                                    tooltip: 'Scan',
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  Text(
+                                    'Facility Access',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.green[900],
+                                      fontWeight: FontWeight.w500,
+                                    ), //Textstyle
+                                  ), //Text
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  const Text(
+                                    'Scan the QR Code to access the facilities',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.blue,
+                                    ), //Textstyle
+                                  ), //Text
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  SizedBox(
+                                    width: 100,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              const QRViewExample(),
+                                        ));
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.green)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4),
+                                        child: Row(
+                                          children: const [
+                                            Icon(Icons.touch_app),
+                                            Text('Scan')
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ) //SizedBox
+                                ],
+                              ), //Column
+                            ), //Padding
+                          ), //SizedBox
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.resumeCamera();
-                          },
-                          child: const Text('resume',
-                              style: TextStyle(fontSize: 20)),
+                      Expanded(
+                        child: Card(
+                          elevation: 50,
+                          shadowColor: Colors.black,
+                          color: Colors.greenAccent[100],
+                          child: SizedBox(
+                            width: 200,
+                            height: 250,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.person_sharp,
+                                      size: 50,
+                                    ),
+                                    tooltip: 'Scan',
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  Text(
+                                    'Your Profile',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.green[900],
+                                      fontWeight: FontWeight.w500,
+                                    ), //Textstyle
+                                  ), //Text
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  const Text(
+                                    'View your account details here',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.blue,
+                                    ), //Textstyle
+                                  ), //Text
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  SizedBox(
+                                    width: 100,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => Profile(),
+                                        ));
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.green)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4),
+                                        child: Row(
+                                          children: const [
+                                            Icon(Icons.info),
+                                            Text('View')
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ) //SizedBox
+                                ],
+                              ), //Column
+                            ), //Padding
+                          ), //SizedBox
                         ),
-                      )
-                    ],
-                  ),
-                ],
+                      ),
+                    ]),
+                    Row(children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 50,
+                          shadowColor: Colors.black,
+                          color: Colors.greenAccent[100],
+                          child: SizedBox(
+                            width: 200,
+                            height: 250,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.money,
+                                      size: 50,
+                                    ),
+                                    tooltip: 'Scan',
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  Text(
+                                    'Fee Status',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.green[900],
+                                      fontWeight: FontWeight.w500,
+                                    ), //Textstyle
+                                  ), //Text
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  const Text(
+                                    'Check out Your Fee status',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.blue,
+                                    ), //Textstyle
+                                  ), //Text
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  SizedBox(
+                                    width: 100,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => FeeStatusPage(),
+                                        ));
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.green)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4),
+                                        child: Row(
+                                          children: const [
+                                            Icon(Icons.wallet),
+                                            Text('Chec')
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ) //SizedBox
+                                ],
+                              ), //Column
+                            ), //Padding
+                          ), //SizedBox
+                        ),
+                      ),
+                      Expanded(
+                        child: Card(
+                          elevation: 50,
+                          shadowColor: Colors.black,
+                          color: Colors.greenAccent[100],
+                          child: SizedBox(
+                            width: 200,
+                            height: 250,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.food_bank,
+                                      size: 50,
+                                    ),
+                                    tooltip: 'Scan',
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const Pay()),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  Text(
+                                    'Mess pay',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.green[900],
+                                      fontWeight: FontWeight.w500,
+                                    ), //Textstyle
+                                  ), //Text
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  const Text(
+                                    'Fill in the type food for payment',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.blue,
+                                    ), //Textstyle
+                                  ), //Text
+                                  const SizedBox(
+                                    height: 10,
+                                  ), //SizedBox
+                                  SizedBox(
+                                    width: 100,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => const Pay(),
+                                        ));
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.green)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4),
+                                        child: Row(
+                                          children: const [
+                                            Icon(Icons.payment),
+                                            Text('Pay')
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ) //SizedBox
+                                ],
+                              ), //Column
+                            ), //Padding
+                          ), //SizedBox
+                        ),
+                      ),
+                    ]),
+                  ],
+                ),
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
-  }
-
-  Widget _buildQrView(BuildContext context) {
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
-            MediaQuery.of(context).size.height < 400)
-        ? 150.0
-        : 300.0;
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: scanArea),
-      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
-  }
-
-  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
-    if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }
