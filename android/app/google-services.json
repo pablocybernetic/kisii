@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "579021214128",
+    "project_id": "kisii-6e1b4",
+    "storage_bucket": "kisii-6e1b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579021214128:android:5c850acb7b8198087a8675",
+        "android_client_info": {
+          "package_name": "com.example.kisii"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "579021214128-amf11n8nbmhujk99m8g0j5al1b9c2ota.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbatbu3cRg45uXSdRrYFwby-roBmNlV68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "579021214128-amf11n8nbmhujk99m8g0j5al1b9c2ota.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
 
   Future<Map<String, dynamic>> fetchUserData() async {
     final response = await http
-        .get(Uri.parse('https://jsonplaceholder.typicode.com/users/1'));
+        .get(Uri.parse('https://kisiiuniversity.000webhostapp.com/?id=1'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -253,40 +253,50 @@ class _ProfileState extends State<Profile> {
                         future: _userData,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            final userData = snapshot.data;
+                            final student = snapshot.data!;
                             return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Persional info:',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                Text('Name: ${userData!['name']}'),
-                                Text('Username: ${userData['username']}'),
-                                Text('Email: ${userData['email']}'),
-                                Text('Phone: ${userData['phone']}'),
-                                Text('Website: ${userData['website']}'),
-                                const SizedBox(height: 16),
-                                const Text('Address:',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
                                 Text(
-                                    'Street: ${userData['address']['street']}'),
-                                Text('Suite: ${userData['address']['suite']}'),
-                                Text('City: ${userData['address']['city']}'),
-                                Text(
-                                    'Zipcode: ${userData['address']['zipcode']}'),
-                                const SizedBox(height: 16),
-                                const Text('Company:',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                Text('Name: ${userData['company']['name']}'),
-                                Text(
-                                    'Catchphrase: ${userData['company']['catchPhrase']}'),
-                                Text('BS: ${userData['company']['bs']}'),
+                                    '${student['first_name']} ${student['last_name']}'),
+                                ListTile(
+                                  title: Text('Student ID'),
+                                  subtitle: Text(student['id'].toString()),
+                                ),
+                                ListTile(
+                                  title: Text('Date of Birth'),
+                                  subtitle: Text(student['date_of_birth']),
+                                ),
+                                ListTile(
+                                  title: Text('Gender'),
+                                  subtitle: Text(student['gender']),
+                                ),
+                                ListTile(
+                                  title: Text('Address'),
+                                  subtitle: Text(student['address']),
+                                ),
+                                ListTile(
+                                  title: Text('Email'),
+                                  subtitle: Text(student['email']),
+                                ),
+                                ListTile(
+                                  title: Text('Phone Number'),
+                                  subtitle:
+                                      Text(student['phone_number'] ?? 'Null'),
+                                ),
+                                ListTile(
+                                  title: Text('QR Code'),
+                                  subtitle: Text(student['qr_code'] ?? 'Null'),
+                                ),
+
+                                // Add more list tiles to display other student data
                               ],
                             );
                           } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
+                            return Scaffold(
+                              body: Center(
+                                child: Text('${snapshot.error}'),
+                              ),
+                            );
                           } else {
                             return _buildShimmerEffect();
                             // return const Center(
