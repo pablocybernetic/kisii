@@ -1,11 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
-void main() => runApp(const MaterialApp(home: MyHome()));
 
 class MyHome extends StatelessWidget {
   const MyHome({Key? key}) : super(key: key);
@@ -68,7 +67,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                     Text(
                         'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
                   else
-                    const Text('Scan a code'),
+                    const Text('Scan a coded'),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -165,14 +164,59 @@ class _QRViewExampleState extends State<QRViewExample> {
     );
   }
 
+  bool _isRequestSent = false;
+
   void _onQRViewCreated(QRViewController controller) {
+    User? user = FirebaseAuth.instance.currentUser;
+    String userEmail = user?.email ?? 'No Email';
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
+    controller.scannedDataStream.listen((scanData) async {
+      if (!_isRequestSent) {
+        _isRequestSent = true;
+        setState(() {
+          result = scanData;
+        });
+
+        // Send a POST request with the scanned QR code as the endpoint
+        final response = await http.post(Uri.parse(scanData.code!));
+        if (response.statusCode == 200) {
+          // Display the response in the UI
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response.body)),
+          );
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Email: ' + userEmail),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.network(
+                        'https://kisiiuniversity.000webhostapp.com/images/5c184a4b-d272-4301-b49b-2dbb76fd7350.jpg'),
+                    SizedBox(height: 16),
+                    Text(response.body),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to make request')),
+          );
+        }
+      }
     });
   }
 

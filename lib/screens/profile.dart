@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
@@ -19,8 +20,12 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<Map<String, dynamic>> fetchUserData() async {
-    final response = await http
-        .get(Uri.parse('https://kisiiuniversity.000webhostapp.com/?id=1'));
+    User? user = FirebaseAuth.instance.currentUser;
+    String email = user?.email ?? "null";
+    print('Logged in user email: $email');
+
+    final response = await http.get(
+        Uri.parse('https://kisiiuniversity.000webhostapp.com/?email=$email'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -220,7 +225,7 @@ class _ProfileState extends State<Profile> {
                     ]),
               ),
               Container(
-                height: 600,
+                // height: 600,
                 width: 400,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -284,8 +289,25 @@ class _ProfileState extends State<Profile> {
                                       Text(student['phone_number'] ?? 'Null'),
                                 ),
                                 ListTile(
-                                  title: Text('QR Code'),
-                                  subtitle: Text(student['qr_code'] ?? 'Null'),
+                                  title: Text('Current Enrollment Status'),
+                                  subtitle: Text(
+                                      student['current_enrollment_status'] ??
+                                          'Null'),
+                                ),
+                                ListTile(
+                                  title: Text('Academic Program'),
+                                  subtitle: Text(
+                                      student['academic_program'] ?? 'Null'),
+                                ),
+                                ListTile(
+                                  title: Text('Course'),
+                                  subtitle: Text(student['major'] ?? 'Null'),
+                                ),
+                                ListTile(
+                                  title: Text('Expected Graduation Date'),
+                                  subtitle: Text(
+                                      student['expected_graduation_date'] ??
+                                          'Null'),
                                 ),
 
                                 // Add more list tiles to display other student data

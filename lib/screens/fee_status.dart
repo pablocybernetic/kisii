@@ -52,8 +52,8 @@ class _FeeStatusPageState extends State<FeeStatusPage> {
   }
 
   Future<Map<String, dynamic>> fetchFeeData() async {
-    final response = await http
-        .get(Uri.parse('https://jsonplaceholder.typicode.com/users/1'));
+    final response = await http.get(Uri.parse(
+        'https://kisiiuniversity.000webhostapp.com/?email=gitaup08@gmail.com'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -179,31 +179,26 @@ class _FeeStatusPageState extends State<FeeStatusPage> {
                                     },
                                     children: [
                                       _buildTableRow('Fee  Info', ''),
-                                      _buildTableRow('Name', userData!['name']),
                                       _buildTableRow(
-                                          'Adm no.', userData['username']),
+                                          'Name', userData!['last_name']),
                                       _buildTableRow(
-                                          'Level of study', userData['email']),
+                                          'Student Email', userData['email']),
+                                      _buildTableRow('Level of study',
+                                          userData['degree_level']),
                                       _buildTableRow(
-                                          'Phone', userData['phone']),
-                                      _buildTableRow(
-                                          'Semester', userData['website']),
+                                          'Phone', userData['phone_number']),
+                                      _buildTableRow('Tuition Fees',
+                                          userData['tuition_fees']),
                                       _buildTableRow('Invoice', 'N/L'),
-                                      _buildTableRow('Street',
-                                          userData['address']['street']),
-                                      _buildTableRow('Suite',
-                                          userData['address']['suite']),
-                                      _buildTableRow('Pay penalties',
-                                          userData['address']['city']),
-                                      _buildTableRow('Pay deadlines',
-                                          userData['address']['zipcode']),
-                                      _buildTableRow('bursaries', ''),
+                                      _buildTableRow('scholarships and aid',
+                                          userData['scholarships_and_aid']),
+                                      _buildTableRow('payment_info',
+                                          userData['payment_info']),
                                       _buildTableRow(
-                                          'Name', userData['company']['name']),
-                                      _buildTableRow('Helb',
-                                          userData['company']['catchPhrase']),
-                                      _buildTableRow('Fee Balance',
-                                          userData['company']['bs']),
+                                          'Home address', userData['address']),
+                                      _buildTableRow('outstanding_balance',
+                                          userData['outstanding_balance']),
+                                      _buildTableRow('bursaries', ''),
                                     ],
                                   ),
                                 );
